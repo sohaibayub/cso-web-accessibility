@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+chunks/
+*_backup.json
+axe.min.js
+.DS_Store
+Thumbs.db

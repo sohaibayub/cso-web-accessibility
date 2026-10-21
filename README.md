@@ -5,6 +5,8 @@ Data, results and code for the paper
 **Digital Barriers in Low-Resource Advocacy: A Systematic Accessibility Assessment of Civil Society Organization Websites**
 Muhammad Sohaib Ayub, Umair ul Hassan, Iftikhar Azim Niaz and Imdad Ullah Khan. Submitted to Universal Access in the Information Society, 2026.
 
+Archived on Zenodo: this version at https://doi.org/10.5281/zenodo.23529469, all versions at https://doi.org/10.5281/zenodo.23529468.
+
 The study audited the homepages of 161,220 civil society organizations with recorded websites in the United Kingdom, Australia, the United States, New Zealand and Ireland against WCAG 2.0, 2.1 and 2.2 success criteria using WARD (Web Accessibility Review tool for resource-constrained Domains), a static-analysis tool written in Python. A browser-based audit of a stratified 500-site subsample with axe-core validated the instrument. The audit ran between June and July 2026.
 
 ## Layout

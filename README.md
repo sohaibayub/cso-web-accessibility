@@ -3,7 +3,7 @@
 Data, results and code for the paper
 
 **Digital Barriers in Low-Resource Advocacy: A Systematic Accessibility Assessment of Civil Society Organization Websites**
-Muhammad Sohaib Ayub, Umair ul Hassan, Iftikhar Azim Niaz and Imdad Ullah Khan. Submitted to Universal Access in the Information Society, 2026.
+Muhammad Sohaib Ayub, Iftikhar Azim Niaz, Imdad Ullah Khan and Umair ul Hassan. Submitted to Universal Access in the Information Society, 2026.
 
 Archived on Zenodo: this version at https://doi.org/10.5281/zenodo.23529469, all versions at https://doi.org/10.5281/zenodo.23529468.
 

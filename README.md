@@ -2,7 +2,7 @@
 
 Data, results and code for the paper
 
-**Digital Barriers in Low-Resource Advocacy: A Systematic Accessibility Assessment of Civil Society Organization Websites**
+**Digital Barriers in Low-Resource Advocacy: A Comprehensive Accessibility Assessment of Civil Society Organization Websites**
 Muhammad Sohaib Ayub, Iftikhar Azim Niaz, Imdad Ullah Khan and Umair ul Hassan. Submitted to Universal Access in the Information Society, 2026.
 
 Archived on Zenodo: this version at https://doi.org/10.5281/zenodo.23529469, all versions at https://doi.org/10.5281/zenodo.23529468.
@@ -80,7 +80,7 @@ The `level` field in the issue records is the tool's own label. The paper applie
 python replicate_tables.py
 ```
 
-The script reads the five results files and recomputes every figure in the paper: the reachability breakdown, the headline conformance numbers, Tables 2 to 4, the values plotted in Figures 1 to 3, the WCAG 2.2 transition figures and the most frequent defect texts. It prints each value next to the one printed in the paper and ends with a line saying whether all of them match. It needs only the Python standard library.
+The script reads the five results files and recomputes every figure in the paper: the reachability breakdown, the headline conformance numbers, Tables 2 to 4, the values plotted in Figures 1 to 3, the cross-country test (Kruskal-Wallis H, epsilon-squared and the largest pairwise Cliff's delta), the WCAG 2.2 transition figures and the most frequent defect texts. It prints each value next to the one printed in the paper and ends with a line saying whether all of them match. It needs only the Python standard library.
 
 The definitions it applies are the ones the paper uses. The frame is deduplicated by exact URL within each country. Audited sites are those with status `tested`. The itemized list `issues_2_2` is the extended evaluation; the WCAG 2.1 AA set is that list without the four criteria WCAG 2.2 introduced (2.4.11, 3.2.6, 3.3.7, 3.3.8), the strict WCAG 2.2 set is that list without 4.1.1, and the WCAG 2.0 subset is `issues_2_0`.
 

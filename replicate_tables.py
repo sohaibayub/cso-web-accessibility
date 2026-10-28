@@ -58,6 +58,7 @@ EXPECTED = {
     "decay": {"aus": 10.2, "irl": 10.2, "usa": 12.4, "uk": 18.0, "nz": 24.6},
     "new22_sites_pct": 48.2, "c2411_pct": 36.2, "c326_pct": 17.1,
     "total22": 1158122, "drop_pct": 12.6, "worse_pct": 35.2, "better_pct": 25.4,
+    "kw_h": 1368, "kw_eps2": 0.010, "max_delta": 0.16,
 }
 
 
@@ -104,6 +105,46 @@ def percentile(sorted_values, p):
     k = (len(sorted_values) - 1) * p / 100.0
     lo, hi = int(k), min(int(k) + 1, len(sorted_values) - 1)
     return sorted_values[lo] + (sorted_values[hi] - sorted_values[lo]) * (k - lo)
+
+
+def kruskal_wallis(groups):
+    """H statistic with tie correction and epsilon-squared, as in scipy.stats.kruskal."""
+    allv = sorted((v, g) for g, vals in enumerate(groups) for v in vals)
+    n = len(allv)
+    ranks = [0.0] * n
+    i = 0
+    tie_term = 0
+    while i < n:
+        j = i
+        while j + 1 < n and allv[j + 1][0] == allv[i][0]:
+            j += 1
+        avg = (i + j) / 2.0 + 1.0
+        for k in range(i, j + 1):
+            ranks[k] = avg
+        t = j - i + 1
+        tie_term += t ** 3 - t
+        i = j + 1
+    rank_sum = [0.0] * len(groups)
+    for (v, g), r in zip(allv, ranks):
+        rank_sum[g] += r
+    h = 12.0 / (n * (n + 1)) * sum(rs * rs / len(groups[g]) for g, rs in enumerate(rank_sum)) - 3 * (n + 1)
+    h /= 1 - tie_term / (n ** 3 - n)
+    k = len(groups)
+    return h, (h - k + 1) / (n - k)
+
+
+def cliffs_delta(a, b):
+    """Probability that a value from a exceeds one from b, minus the reverse."""
+    import bisect
+    sb = sorted(b)
+    m = len(sb)
+    more = less = 0
+    for v in a:
+        lo = bisect.bisect_left(sb, v)
+        hi = bisect.bisect_right(sb, v)
+        more += lo
+        less += m - hi
+    return (more - less) / (len(a) * m)
 
 
 class Report:
@@ -216,6 +257,18 @@ def main():
         rep.line(f"  {name}: zero-violation share, 2.1 (percent)", pct(sum(1 for n in a21 if n == 0), len(t)), e[3], "{:.2f}", 0.005)
         rep.line(f"  {name}: zero-violation share, 2.2 strict (percent)", pct(sum(1 for n in a22 if n == 0), len(t)), e[4], "{:.2f}", 0.005)
         rep.line(f"  {name}: mean violations, WCAG 2.2 strict (Fig. 3)", sum(a22) / len(t), E["fig3_22"][code], "{:.1f}", 0.05)
+
+    print("\nCross-country test on per-site WCAG 2.1 AA counts (RQ3)")
+    groups = [[len(set21(r)) for r in audited[code]] for code, _ in COUNTRIES]
+    h, eps2 = kruskal_wallis(groups)
+    rep.line("Kruskal-Wallis H", h, E["kw_h"], "{:,.0f}", 0.5)
+    rep.line("Epsilon-squared (share of variance explained by country)", eps2, E["kw_eps2"], "{:.3f}", 0.0005)
+    deltas = {}
+    for i in range(len(COUNTRIES)):
+        for j in range(i + 1, len(COUNTRIES)):
+            deltas[(COUNTRIES[i][1], COUNTRIES[j][1])] = cliffs_delta(groups[i], groups[j])
+    pair, d = max(deltas.items(), key=lambda kv: abs(kv[1]))
+    rep.line(f"Largest pairwise Cliff's delta ({pair[0]} vs {pair[1]})", abs(d), E["max_delta"], "{:.2f}", 0.005)
 
     print("\nWCAG 2.2 transition (RQ3)")
     n22 = [len(set22(r)) for r in tested]
